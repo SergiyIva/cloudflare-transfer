@@ -14,22 +14,22 @@ export async function main(domain: string, fromAccountId: string = config.DEFAUL
 
   const dns = await exportDNSRecords(currentDomain.id);
   // console.log(dns);
-  await importDNSRecords(currentDomain.id, dns);
+  await importDNSRecords(targetDomain.id, dns);
 
   const pageRules = await exportPageRules(currentDomain.id);
   // console.log(pageRules);
-  await importPageRules(currentDomain.id, pageRules);
+  await importPageRules(targetDomain.id, pageRules);
 
   const sslSettings = await exportSSLSettings(currentDomain.id);
   // console.log(sslSettings);
-  await importSSLSettings(currentDomain.id, {
+  await importSSLSettings(targetDomain.id, {
     ...sslSettings,
     value: "full"
   });
 
   const ruleSets = await exportRuleSets(currentDomain.id);
-  // console.log(ruleSets);
-  await importRuleSets(currentDomain.id, ruleSets);
+  // console.log(ruleSets); 
+  await importRuleSets(targetDomain.id, ruleSets);
 
   console.log("Transfer complete");
   // const zeroTrustPolicies = await exportZeroTrustConfigs(fromAccountId);
