@@ -53,6 +53,12 @@ export const pageHtml = `<!DOCTYPE html>
         button:hover {
             background-color: #2980b9;
         }
+        .purge{
+            background-color: #db4734;
+        }
+        .purge:hover {
+            background-color: #b94329;
+        }
         .spinner {
             display: none;
             border: 4px solid #f3f3f3;
@@ -78,9 +84,39 @@ export const pageHtml = `<!DOCTYPE html>
         <input type="text" id="accountId" name="accountId" value="${config.DEFAULT_ACCOUNT_ID}"><br>
         <button type="submit">Отправить</button>
     </form>
+    <button type="submit" class="purge" id="purge">Очистить кэш</button>
     <div class="spinner" id="spinner"></div>
     </div>
     <script>
+    const purgeButton = document.getElementById("purge");
+    purgeButton.addEventListener('click', async function(event) {
+         event.preventDefault();
+         
+         document.getElementById('spinner').style.display = 'block';
+             
+    try {
+        // Отправляем POST-запрос на сервер
+        const response = await fetch('/api/purge', {
+            method: 'POST',
+        });
+
+        if (!response.ok) {
+            throw new Error('Ошибка при отправке запроса');
+        }
+
+        const data = await response.json();
+        console.log('Успешный ответ:', data);
+        alert(data.message); 
+        // Здесь можно добавить обработку ответа, например, alert(data.message);
+    } catch (error) {
+        console.error('Ошибка:', error);
+        alert('Произошла ошибка при отправке данных');
+    } finally {
+        // Скрываем спиннер
+        document.getElementById('spinner').style.display = 'none';
+    }
+    });
+    
     document.getElementById('domainForm').addEventListener('submit', async function(event) {
     event.preventDefault(); // Предотвращаем стандартную отправку формы
 

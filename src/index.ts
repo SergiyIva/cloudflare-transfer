@@ -5,6 +5,7 @@ import config from "./configs/config";
 import { handleError } from "./lib/handleError";
 import { pageHtml } from "./lib/page";
 import { main } from "./transfer/transfer";
+import { unlink } from "fs/promises";
 
 const port = config.PORT;
 
@@ -29,6 +30,16 @@ app.post("/api/submit", async (req, res) => {
   }
 
   res.send({ message: "Успешно!" });
+});
+app.post("/api/purge", async (_, res) => {
+  try {
+    await unlink("domains.json");
+    await unlink("targets.json");
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.send({ message: "Кэш сброшен" });
 });
 
 app.get("*splat", (_, res) => {
