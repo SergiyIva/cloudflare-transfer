@@ -21,7 +21,8 @@ export async function importDNSRecords(zoneId: string, records: any[]) {
         ttl: record.ttl,
         proxied: record.proxiable,
         comment: record.comment,
-        tags: record.tags
+        tags: record.tags,
+        priority: record.priority
       });
       console.log(`DNS-запись ${record.name} успешно импортирована`);
     } catch (error) {

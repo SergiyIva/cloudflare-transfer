@@ -13,9 +13,9 @@ export async function main(domain: string, fromAccountId: string = config.DEFAUL
   if (!targetDomain) throw new Error("Target domain not found");
 
   const dns = await exportDNSRecords(currentDomain.id);
-  // console.log(dns); 
+  // console.log(dns);
   await importDNSRecords(targetDomain.id, dns);
-
+ 
   const pageRules = await exportPageRules(currentDomain.id);
   // console.log(pageRules);
   await importPageRules(targetDomain.id, pageRules);
