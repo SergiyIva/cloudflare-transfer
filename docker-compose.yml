@@ -1,0 +1,9 @@
+services:
+  transfer:
+    restart: always
+    build:
+      context: .
+    ports:
+      - "5000"
+    env_file:
+      .env
