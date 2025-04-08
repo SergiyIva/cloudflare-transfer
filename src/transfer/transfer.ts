@@ -1,9 +1,9 @@
 import { type Domain, listDomains } from "../lib/cf/domainList.ts";
 import { exportRuleSets, importRuleSets } from "../lib/cf/ruleLists.ts";
-import { exportSSLSettings, importSSLSettings } from "../lib/cf/sslSettings.ts";
-import { exportPageRules, importPageRules } from "../lib/cf/pageRules.ts";
-import { exportDNSRecords, importDNSRecords } from "../lib/cf/dnsRecords.ts";
 import config from "../configs/config.ts";
+import { exportDNSRecords, importDNSRecords } from "../lib/cf/dnsRecords.ts";
+import { exportPageRules, importPageRules } from "../lib/cf/pageRules.ts";
+import { exportSSLSettings, importSSLSettings } from "../lib/cf/sslSettings.ts";
 
 export async function main(domain: string, fromAccountId: string = config.DEFAULT_ACCOUNT_ID) {
   const [domains, targets] = await listDomains(fromAccountId);
@@ -13,7 +13,7 @@ export async function main(domain: string, fromAccountId: string = config.DEFAUL
   if (!targetDomain) throw new Error("Target domain not found");
 
   const dns = await exportDNSRecords(currentDomain.id);
-  // console.log(dns);
+  // console.log(dns); 
   await importDNSRecords(targetDomain.id, dns);
 
   const pageRules = await exportPageRules(currentDomain.id);
@@ -28,7 +28,7 @@ export async function main(domain: string, fromAccountId: string = config.DEFAUL
   });
 
   const ruleSets = await exportRuleSets(currentDomain.id);
-  // console.log(ruleSets); 
+  // console.log(ruleSets.map(r => r.rules));
   await importRuleSets(targetDomain.id, ruleSets);
 
   console.log("Transfer complete");

@@ -8,6 +8,14 @@ export async function exportRuleSets(zoneId: string) {
     for await (const ruleLists of cf.rulesets.list({ zone_id: zoneId })) {
       if (phases.includes(ruleLists.phase)) {
         const ruleList = await cf.rulesets.get(ruleLists.id, { zone_id: zoneId });
+        ruleList.rules = ruleList.rules.map((rule: Record<string, any>) => {
+          delete rule.id;
+          delete rule.version;
+          delete rule.last_updated;
+          delete rule.ref;
+
+          return rule as any;
+        });
         rules.push(ruleList);
       }
     }
@@ -27,7 +35,11 @@ export async function importRuleSets(zoneId: string, rules: any[]) {
         kind: rule.kind,
         description: rule.description,
         phase: rule.phase,
-        rules: rule.rules,
+        rules: rule.rules.map((r: Record<string, any>) => {
+          delete r.public_id;
+
+          return r;
+        }),
       });
       console.log(`Правило ${rule.name} успешно импортировано`);
     } catch (error) {
